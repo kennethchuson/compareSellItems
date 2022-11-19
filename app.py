@@ -1,6 +1,8 @@
 from flask import Flask, render_template, url_for, request, redirect
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys 
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By 
+from lxml import html
 import time 
 import openpyxl
 
@@ -35,8 +37,23 @@ def home():
         search2.send_keys(Keys.RETURN) 
 
         #webscrape
+        product_img = [] 
+        product_title = [] 
+        product_cost = [] 
 
-        #store data into excel 
+        for products_img in driver.find_elements(By.XPATH, '//img[contains(@class, "s-image")]'): 
+            product_img.append(products_img.get_attribute('src'))
+
+
+        for products in html.fromstring(driver.page_source).xpath('//div[contains(@data-cel-widget, "search_result_")]'): 
+            product_title.append(products.xpath('.//span[@class="a-size-base-plus a-color-base a-text-normal"]/text()')) 
+            product_cost.append(products.xpath('.//span[@class="a-price-whole"]/text()')) 
+        
+        print("images: ", product_img) 
+        print("title: ", product_title) 
+        print("cost: ", product_cost)
+
+
 
 
 
