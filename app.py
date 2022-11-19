@@ -19,6 +19,9 @@ workbook = openpyxl.load_workbook("storage/storage_one.xlsx")
 
 @app.route('/', methods=['POST', 'GET'])
 def home():
+    product_img = [] 
+    product_title = [] 
+    product_cost = []
     if request.method == 'POST':
         result_enter = request.form['content'] 
 
@@ -37,17 +40,15 @@ def home():
         search2.send_keys(Keys.RETURN) 
 
         #webscrape
-        product_img = [] 
-        product_title = [] 
-        product_cost = [] 
+     
+        for products in html.fromstring(driver.page_source).xpath('//div[contains(@data-cel-widget, "search_result_")]'): 
+            product_title.append(products.xpath('.//span[@class="a-size-base-plus a-color-base a-text-normal"]/text()')) 
+            product_cost.append(products.xpath('.//span[@class="a-price-whole"]/text()'))
 
         for products_img in driver.find_elements(By.XPATH, '//img[contains(@class, "s-image")]'): 
             product_img.append(products_img.get_attribute('src'))
 
-
-        for products in html.fromstring(driver.page_source).xpath('//div[contains(@data-cel-widget, "search_result_")]'): 
-            product_title.append(products.xpath('.//span[@class="a-size-base-plus a-color-base a-text-normal"]/text()')) 
-            product_cost.append(products.xpath('.//span[@class="a-price-whole"]/text()')) 
+ 
         
         print("images: ", product_img) 
         print("title: ", product_title) 
@@ -56,12 +57,16 @@ def home():
 
 
 
-
-
         time.sleep(1)
-        
+    
+    amazon_info = {
+        'image': product_img, 
+        'title': product_title, 
+        'cost': product_cost
+    }
 
-    return render_template('index.html')
+
+    return render_template('index.html', amazon_info=amazon_info)
 
 
 if __name__ == '__main__':
