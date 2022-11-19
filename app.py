@@ -5,6 +5,8 @@ from selenium.webdriver.common.by import By
 from lxml import html
 import time 
 import openpyxl
+import numpy as np
+
 
 app = Flask(__name__)
 
@@ -59,14 +61,26 @@ def home():
 
         time.sleep(1)
     
+    # amazon_info = {
+    #     'image': product_img, 
+    #     'title': np.array(product_title).flatten(), 
+    #     'cost': np.array(product_cost).flatten()
+    # }
+
     amazon_info = {
         'image': product_img, 
         'title': product_title, 
         'cost': product_cost
-    }
+     }
 
 
-    return render_template('index.html', amazon_info=amazon_info)
+
+
+
+    print("amazon_info: ", amazon_info)
+
+
+    return render_template('index.html', amazon_info_img=amazon_info['image'], amazon_info_title=amazon_info['title'], amazon_info_cost=amazon_info['cost'])
 
 
 if __name__ == '__main__':

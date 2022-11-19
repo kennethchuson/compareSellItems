@@ -8,10 +8,22 @@
         <input type="submit" value="Enter"/>
     </form>
 
-    {{ amazon_info.image }}
-    {{ amazon_info.title }}
-    {{ amazon_info.cost }}
+    <div class="title_container">
+        <h1>Amazon</h1> 
+        <div>
+            {% for elem_img in amazon_info_img %}
+                <img src="{{ elem_img }}"/>
+            {% endfor %}
 
+            {% for elem_title in amazon_info_title %}
+                <h5>{{ elem_title }}</h5>
+            {% endfor %}
+
+            {% for elem_cost in amazon_info_cost %}
+                <h5>{{ elem_cost }}</h5>
+            {% endfor %}    
+        </div> 
+    </div>
 
 </div>
 
