@@ -17,6 +17,7 @@ driver2 = webdriver.Chrome(path)
 
 
 workbook = openpyxl.load_workbook("storage/storage_one.xlsx")
+sheet = workbook.active 
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -61,23 +62,18 @@ def home():
 
         time.sleep(1)
     
-    # amazon_info = {
-    #     'image': product_img, 
-    #     'title': np.array(product_title).flatten(), 
-    #     'cost': np.array(product_cost).flatten()
-    # }
-
     amazon_info = {
+        'name': "Amazon",
         'image': product_img, 
-        'title': product_title, 
-        'cost': product_cost
-     }
-
-
-
+        'title': list(np.array(list(product_title)).flatten()), 
+        'cost': list(np.array(list(product_cost)).flatten()) 
+    }
+    
 
 
     print("amazon_info: ", amazon_info)
+
+    #store into excel 
 
 
     return render_template('index.html', amazon_info_img=amazon_info['image'], amazon_info_title=amazon_info['title'], amazon_info_cost=amazon_info['cost'])
