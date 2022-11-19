@@ -11,17 +11,11 @@
     <div class="title_container">
         <h1>Amazon</h1> 
         <div>
-            {% for elem_img in amazon_info_img %}
+            {% for elem_img, elem_title, elem_cost in context_amazon_info["data"] %}
                 <img src="{{ elem_img }}"/>
-            {% endfor %}
-
-            {% for elem_title in amazon_info_title %}
                 <h5>{{ elem_title }}</h5>
-            {% endfor %}
-
-            {% for elem_cost in amazon_info_cost %}
                 <h5>{{ elem_cost }}</h5>
-            {% endfor %}    
+            {% endfor %} 
         </div> 
     </div>
 

@@ -74,9 +74,22 @@ def home():
     print("amazon_info: ", amazon_info)
 
     #store into excel 
+    sheet['B1'] = amazon_info['name'] 
+    sheet['B2'] = "Image"
+    sheet['C2'] = "Title"
+    sheet['D2'] = "Cost"
+    
+    '''
+    for amazon_product in range(3, len(amazon_info['image']) + 3): 
+        sheet[f'B{amazon_product}'] = amazon_info['image']
+        sheet[f'C{amazon_product}'] = amazon_info['title']
+        sheet[f'D{amazon_product}'] = amazon_info['cost']
+    '''
 
 
-    return render_template('index.html', amazon_info_img=amazon_info['image'], amazon_info_title=amazon_info['title'], amazon_info_cost=amazon_info['cost'])
+    #return render_template('index.html', amazon_info_img=amazon_info['image'], amazon_info_title=amazon_info['title'], amazon_info_cost=amazon_info['cost'])
+    return render_template('index.html', context_amazon_info={"data":zip(amazon_info['image'], amazon_info['title'], amazon_info['cost'])})
+
 
 
 if __name__ == '__main__':
