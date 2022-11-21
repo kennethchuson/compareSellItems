@@ -1,3 +1,18 @@
 * {
     background-color: lightblue; 
 }
+
+
+.title_container {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    background-color: #309bf4;
+    padding: 10px;
+}
+
+.amazon-grid-item {
+    border: 1px solid rgba(54, 54, 54, 0.8);
+    padding: 20px;
+    font-size: 30px;
+    text-align: center;
+}

@@ -5,7 +5,6 @@ from selenium.webdriver.common.by import By
 from lxml import html
 import time 
 import openpyxl
-import numpy as np
 
 
 app = Flask(__name__)
@@ -25,6 +24,11 @@ def home():
     product_img = [] 
     product_title = [] 
     product_cost = []
+
+    product2_img = [] 
+    product2_title = [] 
+    product2_cost = [] 
+
     if request.method == 'POST':
         result_enter = request.form['content'] 
 
@@ -42,14 +46,36 @@ def home():
         search.send_keys(Keys.RETURN) 
         search2.send_keys(Keys.RETURN) 
 
-        #webscrape
-     
+        #webscrape amazon
+        a_test_title = [] 
+        b_test_cost = [] 
         for products in html.fromstring(driver.page_source).xpath('//div[contains(@data-cel-widget, "search_result_")]'): 
-            product_title.append(products.xpath('.//span[@class="a-size-base-plus a-color-base a-text-normal"]/text()')) 
-            product_cost.append(products.xpath('.//span[@class="a-price-whole"]/text()'))
+            a_test_title.append(products.xpath('.//span[@class="a-size-base-plus a-color-base a-text-normal"]/text()')) 
+            b_test_cost.append(products.xpath('.//span[@class="a-price-whole"]/text()'))
+        
+        aTT = [j for sub in a_test_title for j in sub]
+        aTC = [j for sub in b_test_cost for j in sub]
+
+        for elem in aTT: 
+            product_title.append(elem) 
+        
+        for elem in aTC:
+            product_cost.append(elem)  
+    
+
 
         for products_img in driver.find_elements(By.XPATH, '//img[contains(@class, "s-image")]'): 
             product_img.append(products_img.get_attribute('src'))
+
+
+
+        #webscrape ebay 
+
+
+        '''
+        for products_img in driver2.find_elements(By.XPATH, '//img[contains(@class, "s-item__image-img")]'): 
+            product2_img.append(products_img.get_attribute('src'))
+        '''
 
  
         
@@ -65,9 +91,16 @@ def home():
     amazon_info = {
         'name': "Amazon",
         'image': product_img, 
-        'title': list(np.array(list(product_title)).flatten()), 
-        'cost': list(np.array(list(product_cost)).flatten()) 
+        'title': product_title, 
+        'cost': product_cost
     }
+
+    '''
+    ebay_info = {
+        'name': "Ebay", 
+        'image': product2_img
+    }
+    '''
     
 
 
@@ -86,9 +119,7 @@ def home():
         sheet[f'D{amazon_product}'] = amazon_info['cost']
     '''
 
-
-    #return render_template('index.html', amazon_info_img=amazon_info['image'], amazon_info_title=amazon_info['title'], amazon_info_cost=amazon_info['cost'])
-    return render_template('index.html', context_amazon_info={"data":zip(amazon_info['image'], amazon_info['title'], amazon_info['cost'])})
+    return render_template('index.html', context_amazon_info={"data":zip(amazon_info['image'], amazon_info['title'], amazon_info['cost'])} )
 
 
 

@@ -8,16 +8,17 @@
         <input type="submit" value="Enter"/>
     </form>
 
-    <div class="title_container">
-        <h1>Amazon</h1> 
-        <div>
-            {% for elem_img, elem_title, elem_cost in context_amazon_info["data"] %}
+    <h1>Amazon</h1>
+    <div class="title_container"> 
+        {% for elem_img, elem_title, elem_cost in context_amazon_info["data"] %}
+            <div class="amazon-grid-item">
                 <img src="{{ elem_img }}"/>
-                <h5>{{ elem_title }}</h5>
-                <h5>{{ elem_cost }}</h5>
-            {% endfor %} 
-        </div> 
+                <h6>{{ elem_title }}</h6>
+                <h3>${{ elem_cost }}</h3>
+            </div>
+        {% endfor %} 
     </div>
+
 
 </div>
 
