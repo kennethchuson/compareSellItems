@@ -1,36 +1,46 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<h1>Search Sells</h1>
-<div>
-    <form action="/" method="POST">
-        <input type="text" name="content" id="content">
-        <input type="submit" value="Enter"/>
-    </form>
 
-    <h1>Amazon</h1>
-    <div class="title_container"> 
-        {% for elem_img, elem_title, elem_cost in context_amazon_info["data"] %}
-            <div class="amazon-grid-item">
-                <img src="{{ elem_img }}"/>
-                <h6>{{ elem_title }}</h6>
-                <h3>${{ elem_cost }}</h3>
+
+
+
+    <div class="container-fluid">
+        <h1>Search Product</h1>
+        <form action="/" method="POST">
+            <input type="text" name="content" id="content">
+            <input type="submit" value="Enter"/>
+        </form>
+        <div class="row">
+          <div class="col-3 bg-info">
+            <h1>Amazon</h1>
+            <div class="title_container"> 
+                {% for elem_img, elem_title, elem_cost in context_amazon_info["data"] %}
+                    <div class="amazon-grid-item">
+                        <img src="{{ elem_img }}"/>
+                        <h6>{{ elem_title }}</h6>
+                        <h3>${{ elem_cost }}</h3>
+                    </div>
+                {% endfor %} 
             </div>
-        {% endfor %} 
+          </div>
+          <div class="col-6 bg-success">
+            <h1>Analyze</h1>
+          </div>
+          <div class="col-3 bg-info">
+            <h1>Ebay</h1>
+            <div class="title_container"> 
+                {% for elem_title, elem_cost in context_ebay_info["data"] %}
+                    <div class="ebay-grid-item">
+                        <h6>{{ elem_title }}</h6>
+                        <h3>{{ elem_cost }}</h3>
+                    </div>
+                {% endfor %} 
+            </div>
+          </div>
+        </div>
     </div>
 
-    <h1>Ebay</h1>
-    <div class="title_container"> 
-        {% for elem_title, elem_cost in context_ebay_info["data"] %}
-            <div class="ebay-grid-item">
-                <h6>{{ elem_title }}</h6>
-                <h3>{{ elem_cost }}</h3>
-            </div>
-        {% endfor %} 
-    </div>
-
-
-</div>
 
 {% endblock %}
 

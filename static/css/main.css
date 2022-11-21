@@ -1,12 +1,11 @@
 * {
-    background-color: lightblue; 
+    background-color: rgb(174, 174, 174); 
 }
 
 
 .title_container {
     display: grid;
     grid-template-columns: auto auto auto;
-    background-color: #309bf4;
     padding: 10px;
 }
 

@@ -67,7 +67,6 @@ def home():
 
 
         for products_img in driver.find_elements(By.XPATH, '//img[contains(@class, "s-image")]'): 
-            #product_img.append(os.path.splitext(products_img.get_attribute('src')[0] + '.png')) 
             product_img.append(products_img.get_attribute('src'))  
 
 
