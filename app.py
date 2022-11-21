@@ -5,6 +5,8 @@ from selenium.webdriver.common.by import By
 from lxml import html
 import time 
 import openpyxl
+import os
+
 
 
 app = Flask(__name__)
@@ -65,17 +67,40 @@ def home():
 
 
         for products_img in driver.find_elements(By.XPATH, '//img[contains(@class, "s-image")]'): 
-            product_img.append(products_img.get_attribute('src'))
+            #product_img.append(os.path.splitext(products_img.get_attribute('src')[0] + '.png')) 
+            product_img.append(products_img.get_attribute('src'))  
+
+
 
 
 
         #webscrape ebay 
 
+        '''
+        size_driver2_elements = driver2.find_elements(By.XPATH, '//img[contains(@class, "s-item__image-img")]') 
 
+        for i in range(len(size_driver2_elements)):
+            a = os.path.splitext(size_driver2_elements[i].get_attribute('src'))[0] + '.png' 
+            product2_img.append(a)
         '''
-        for products_img in driver2.find_elements(By.XPATH, '//img[contains(@class, "s-item__image-img")]'): 
-            product2_img.append(products_img.get_attribute('src'))
-        '''
+        
+
+        a2_test_title = [] 
+        b2_test_cost = []
+
+        for products in html.fromstring(driver2.page_source).xpath('//div[contains(@class, "srp-river srp-layout-inner")]'): 
+            a2_test_title.append(products.xpath('//div[@class="s-item__title"]/span[@role="heading"]/text()')) 
+            b2_test_cost.append(products.xpath('.//span[@class="s-item__price"]/text()'))
+
+        aTT2 = [j for sub in a2_test_title for j in sub]
+        aTC2 = [j for sub in b2_test_cost for j in sub]
+
+        for elem in aTT2: 
+            product2_title.append(elem) 
+        
+        for elem in aTC2:
+            product2_cost.append(elem)
+        
 
  
         
@@ -95,12 +120,14 @@ def home():
         'cost': product_cost
     }
 
-    '''
+    
     ebay_info = {
         'name': "Ebay", 
-        'image': product2_img
-    }
-    '''
+        'image': product2_img, 
+        'title': product2_title[1:], 
+        'cost': product2_cost[1:]
+    } 
+
     
 
 
@@ -119,7 +146,7 @@ def home():
         sheet[f'D{amazon_product}'] = amazon_info['cost']
     '''
 
-    return render_template('index.html', context_amazon_info={"data":zip(amazon_info['image'], amazon_info['title'], amazon_info['cost'])} )
+    return render_template('index.html', context_amazon_info={"data":zip(amazon_info['image'], amazon_info['title'], amazon_info['cost'])}, context_ebay_info={"data": zip(ebay_info['title'], ebay_info['cost'])})
 
 
 
