@@ -119,6 +119,7 @@ def home():
         'cost': product2_cost[1:]
     } 
 
+
     
 
     #store into excel 
@@ -136,40 +137,46 @@ def home():
     sheet_write.write('H2', "Cost")
 
 
+    
+
     for amazon_product_img in range(len(amazon_info['image'])): 
         path = 'B' + str(amazon_product_img + 3)
-        sheet_write.write(path, amazon_info['image'][amazon_product_img])
+        sheet_write.write(path, str(amazon_info['image'][amazon_product_img])) 
 
-    
 
     for amazon_product_title in range(len(amazon_info['title'])):
         path = 'C' + str(amazon_product_title + 3)
-        sheet_write.write(path, amazon_info['title'][amazon_product_title])
+        sheet_write.write(path, str(amazon_info['title'][amazon_product_title])) 
     
     for amazon_product_cost in range(len(amazon_info['cost'])):
         path = 'D' + str(amazon_product_cost + 3)
-        sheet_write.write(path, amazon_info['cost'][amazon_product_cost])
+        sheet_write.write(path, str(amazon_info['cost'][amazon_product_cost])) 
     
 
 
     for ebay_product_img in range(len(ebay_info['image'])): 
         path = 'F' + str(ebay_product_img + 3)
-        sheet_write.write(path, ebay_info['image'][ebay_product_img])
+        sheet_write.write(path, str(ebay_info['image'][ebay_product_img])) 
 
     for ebay_product_title in range(len(ebay_info['title'])): 
         path = 'G' + str(ebay_product_title + 3)
-        sheet_write.write('G' + str(ebay_product_title + 3), ebay_info['title'][ebay_product_title])
+        sheet_write.write('G' + str(ebay_product_title + 3), str(ebay_info['title'][ebay_product_title])) 
     
 
     for ebay_product_cost in range(len(ebay_info['cost'])): 
         path = 'H' + str(ebay_product_cost + 3)
-        sheet_write.write(path, ebay_info['cost'][ebay_product_cost])
+        sheet_write.write(path, str(ebay_info['cost'][ebay_product_cost])) 
     
 
 
     workbook_write.close() 
 
-    return render_template('index.html', context_amazon_info={"data":zip(amazon_info['image'], amazon_info['title'], amazon_info['cost'])}, context_ebay_info={"data": zip(ebay_info['title'], ebay_info['cost'])})
+    total_sum_amazon_cost = str(sum([int(str(i).replace(',','').replace('$','').replace('.','')) for i in amazon_info['cost']]))
+    total_sum_ebay_cost = str(sum([int(str(i).replace(',','').replace('$','').replace('.','')) for i in ebay_info['cost']]))
+
+
+
+    return render_template('index.html', context_amazon_info={"data":zip(amazon_info['image'], amazon_info['title'], amazon_info['cost'])}, context_ebay_info={"data": zip(ebay_info['title'], ebay_info['cost'])}, total_amazon_cost=total_sum_amazon_cost, total_ebay_cost=total_sum_ebay_cost)
 
 
 
