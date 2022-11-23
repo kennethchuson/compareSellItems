@@ -5,6 +5,7 @@ from selenium.webdriver.common.by import By
 from lxml import html
 import time 
 import openpyxl
+import xlsxwriter
 import os
 
 
@@ -18,7 +19,10 @@ driver2 = webdriver.Chrome(path)
 
 
 workbook = openpyxl.load_workbook("storage/storage_one.xlsx")
+workbook_write = xlsxwriter.Workbook("storage/storage_one.xlsx")
+
 sheet = workbook.active 
+sheet_write = workbook_write.add_worksheet()
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -74,14 +78,6 @@ def home():
 
 
         #webscrape ebay 
-
-        '''
-        size_driver2_elements = driver2.find_elements(By.XPATH, '//img[contains(@class, "s-item__image-img")]') 
-
-        for i in range(len(size_driver2_elements)):
-            a = os.path.splitext(size_driver2_elements[i].get_attribute('src'))[0] + '.png' 
-            product2_img.append(a)
-        '''
         
 
         a2_test_title = [] 
@@ -101,11 +97,7 @@ def home():
             product2_cost.append(elem)
         
 
- 
-        
-        print("images: ", product_img) 
-        print("title: ", product_title) 
-        print("cost: ", product_cost)
+
 
 
 
@@ -129,21 +121,53 @@ def home():
 
     
 
-
-    print("amazon_info: ", amazon_info)
-
     #store into excel 
-    sheet['B1'] = amazon_info['name'] 
-    sheet['B2'] = "Image"
-    sheet['C2'] = "Title"
-    sheet['D2'] = "Cost"
+
+
+    sheet_write.write('B1', amazon_info['name'])
+    sheet_write.write('B2', "Image")
+    sheet_write.write('C2', "Title")
+    sheet_write.write('D2', "Cost")
+
+
+    sheet_write.write('F1', ebay_info['name'])
+    sheet_write.write('F2', "Image")
+    sheet_write.write('G2', "Title")
+    sheet_write.write('H2', "Cost")
+
+
+    for amazon_product_img in range(len(amazon_info['image'])): 
+        path = 'B' + str(amazon_product_img + 3)
+        sheet_write.write(path, amazon_info['image'][amazon_product_img])
+
     
-    '''
-    for amazon_product in range(3, len(amazon_info['image']) + 3): 
-        sheet[f'B{amazon_product}'] = amazon_info['image']
-        sheet[f'C{amazon_product}'] = amazon_info['title']
-        sheet[f'D{amazon_product}'] = amazon_info['cost']
-    '''
+
+    for amazon_product_title in range(len(amazon_info['title'])):
+        path = 'C' + str(amazon_product_title + 3)
+        sheet_write.write(path, amazon_info['title'][amazon_product_title])
+    
+    for amazon_product_cost in range(len(amazon_info['cost'])):
+        path = 'D' + str(amazon_product_cost + 3)
+        sheet_write.write(path, amazon_info['cost'][amazon_product_cost])
+    
+
+
+    for ebay_product_img in range(len(ebay_info['image'])): 
+        path = 'F' + str(ebay_product_img + 3)
+        sheet_write.write(path, ebay_info['image'][ebay_product_img])
+
+    for ebay_product_title in range(len(ebay_info['title'])): 
+        path = 'G' + str(ebay_product_title + 3)
+        sheet_write.write('G' + str(ebay_product_title + 3), ebay_info['title'][ebay_product_title])
+    
+
+    for ebay_product_cost in range(len(ebay_info['cost'])): 
+        path = 'H' + str(ebay_product_cost + 3)
+        sheet_write.write(path, ebay_info['cost'][ebay_product_cost])
+    
+
+
+    workbook_write.close() 
 
     return render_template('index.html', context_amazon_info={"data":zip(amazon_info['image'], amazon_info['title'], amazon_info['cost'])}, context_ebay_info={"data": zip(ebay_info['title'], ebay_info['cost'])})
 
