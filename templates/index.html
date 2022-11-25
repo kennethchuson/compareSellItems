@@ -8,7 +8,7 @@
     <div class="container-fluid">
         <h1>Search Product</h1>
         <form action="/" method="POST">
-            <input type="text" name="content" id="content">
+            <input type="text" name="content" id="content" required>
             <input type="submit" value="Enter"/>
         </form>
         <div class="row">
@@ -30,6 +30,16 @@
             <p>Amazon - </p><p>${{ total_amazon_cost }}</p>
             <p>Ebay - </p><p>${{ total_ebay_cost }}</p>
             <h6>Similar Name Products: </h6>
+            <div class="list_similar_products">
+                {% for product1, product2 in context_similar_products["data"] %}
+                    <div class="similar_card_product">
+                        <p>Amazon:</p>
+                        <h6>{{ product1 }}</h6>
+                        <p>Ebay:</p>
+                        <h6>{{ product2 }}</h6>
+                    </div>
+                {% endfor %}
+            </div>
           </div>
           <div class="col-3 bg-info">
             <h1>Ebay</h1>

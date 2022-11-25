@@ -3,6 +3,10 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By 
 from lxml import html
+import spacy
+import itertools
+from itertools import permutations
+import re
 import time 
 import openpyxl
 import xlsxwriter
@@ -17,6 +21,9 @@ path = "/Users/kennethchuson/Desktop/compareSellItems/selenium_driver/chromedriv
 driver = webdriver.Chrome(path)
 driver2 = webdriver.Chrome(path) 
 
+nlp = spacy.load("en_core_web_lg")
+
+regex_ignore_special_chars = re.compile('[,\.!?|()+$"/]')
 
 #workbook = openpyxl.load_workbook("storage/storage_one.xlsx")
 workbook_write = xlsxwriter.Workbook("storage/storage_one.xlsx")
@@ -35,8 +42,10 @@ def home():
     product2_title = [] 
     product2_cost = [] 
 
+
     if request.method == 'POST':
         result_enter = request.form['content'] 
+
 
         driver.get("https://www.amazon.com")
         driver2.get("https://www.ebay.com")
@@ -176,8 +185,51 @@ def home():
     total_sum_ebay_cost = str(sum([int(str(i).replace(',','').replace('$','').replace('.','')) for i in ebay_info['cost']]))
 
 
+    #Product title similarities 
+    amazon_title_parse_list = [ regex_ignore_special_chars.sub('', sentence) for sentence in amazon_info['title'] ] 
+    ebay_title_parse_list = [ regex_ignore_special_chars.sub('', sentence) for sentence in ebay_info['title'] ]
 
-    return render_template('index.html', context_amazon_info={"data":zip(amazon_info['image'], amazon_info['title'], amazon_info['cost'])}, context_ebay_info={"data": zip(ebay_info['title'], ebay_info['cost'])}, total_amazon_cost=total_sum_amazon_cost, total_ebay_cost=total_sum_ebay_cost)
+
+    permute = itertools.permutations(amazon_title_parse_list, len(ebay_title_parse_list))
+
+    store_similars = [] 
+    top_similars_titles = [] 
+    result_amazon_list = [] 
+    result_ebay_list = [] 
+
+
+    for elem in permute: 
+        a = list(zip(elem, ebay_title_parse_list))
+        for elem2 in a: 
+            s1 = nlp(elem2[0]) 
+            s2 = nlp(elem2[1]) 
+            calc_similar = s1.similarity(s2) 
+            store_similars.append([calc_similar, s1, s2]) 
+    
+    store_similars.sort(key=lambda x: x[0])
+
+    if len(store_similars) > 0: 
+        for i in range(len(store_similars) - 5, len(store_similars)): 
+            a = [store_similars[i][0], store_similars[i][1], store_similars[i][2]]
+            top_similars_titles.append(a) 
+        
+        for i in range(len(top_similars_titles)): 
+            start = 0 
+            end = len(top_similars_titles) - 1
+
+            temp = top_similars_titles[start]
+            top_similars_titles[start] = top_similars_titles[end]
+            top_similars_titles[end] = temp
+        
+        for i in range(len(top_similars_titles)): 
+            result_amazon_list.append(top_similars_titles[i][1])
+        
+        for i in range(len(top_similars_titles)): 
+            result_ebay_list.append(top_similars_titles[i][2])
+    
+
+
+    return render_template('index.html', context_amazon_info={"data":zip(amazon_info['image'], amazon_info['title'], amazon_info['cost'])}, context_ebay_info={"data": zip(ebay_info['title'], ebay_info['cost'])}, total_amazon_cost=total_sum_amazon_cost, total_ebay_cost=total_sum_ebay_cost, context_similar_products={"data": zip(result_amazon_list, result_ebay_list)})
 
 
 
