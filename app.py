@@ -18,10 +18,10 @@ driver = webdriver.Chrome(path)
 driver2 = webdriver.Chrome(path) 
 
 
-workbook = openpyxl.load_workbook("storage/storage_one.xlsx")
+#workbook = openpyxl.load_workbook("storage/storage_one.xlsx")
 workbook_write = xlsxwriter.Workbook("storage/storage_one.xlsx")
 
-sheet = workbook.active 
+#sheet = workbook.active 
 sheet_write = workbook_write.add_worksheet()
 
 
@@ -43,8 +43,8 @@ def home():
 
 
 
-        search = driver.find_element_by_id("twotabsearchtextbox")
-        search2 = driver2.find_element_by_name("_nkw")
+        search = driver.find_element("id", "twotabsearchtextbox")
+        search2 = driver2.find_element("name", "_nkw")
 
         search.send_keys(str(result_enter)) 
         search2.send_keys(str(result_enter)) 
@@ -166,6 +166,7 @@ def home():
     for ebay_product_cost in range(len(ebay_info['cost'])): 
         path = 'H' + str(ebay_product_cost + 3)
         sheet_write.write(path, str(ebay_info['cost'][ebay_product_cost])) 
+    
     
 
 
