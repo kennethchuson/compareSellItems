@@ -21,7 +21,7 @@ python3 app.py
 
 ## DEMO: 
 
-![](https://github.com/kennethchuson/compareSellItems/Demo.gif)
+![](https://github.com/kennethchuson/compareSellItems/blob/main/Demo.gif)
 
 
 
