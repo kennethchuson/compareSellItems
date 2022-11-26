@@ -19,9 +19,15 @@ Run Project:
 python3 app.py
 ```
 
-## DEMO: 
+## Demo: 
 
 ![](https://github.com/kennethchuson/compareSellItems/blob/main/Demo.gif)
+
+## Diagram: 
+
+![](https://github.com/kennethchuson/compareSellItems/blob/main/Diagram_Demo.png)
+
+
 
 
 
