@@ -15,9 +15,8 @@
           <div class="col-3 bg-info">
             <h1>Amazon</h1>
             <div class="title_container"> 
-                {% for elem_img, elem_title, elem_cost in context_amazon_info["data"] %}
+                {% for elem_title, elem_cost in context_amazon_info["data"] %}
                     <div class="amazon-grid-item">
-                        <img src="{{ elem_img }}"/>
                         <h6>{{ elem_title }}</h6>
                         <h3>${{ elem_cost }}</h3>
                     </div>
@@ -33,9 +32,9 @@
             <div class="list_similar_products">
                 {% for product1, product2 in context_similar_products["data"] %}
                     <div class="similar_card_product">
-                        <p>Amazon:</p>
+                        <h5>Product 1:</h5>
                         <h6>{{ product1 }}</h6>
-                        <p>Ebay:</p>
+                        <h5>Product 2:</h5>
                         <h6>{{ product2 }}</h6>
                     </div>
                 {% endfor %}

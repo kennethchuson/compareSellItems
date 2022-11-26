@@ -118,7 +118,7 @@ def home():
     amazon_info = {
         'name': "Amazon",
         'image': product_img, 
-        'title': product_title[(len(product_title) // 2) - 5:len(product_title) // 2], 
+        'title': product_title[:5], 
         'cost': product_cost
     }
 
@@ -126,7 +126,7 @@ def home():
     ebay_info = {
         'name': "Ebay", 
         'image': product2_img, 
-        'title': product2_title[(len(product_title) // 2) - 5:len(product_title) // 2], 
+        'title': product2_title[1:6], 
         'cost': product2_cost[1:]
     } 
 
@@ -200,6 +200,9 @@ def home():
     result_amazon_list = [] 
     result_ebay_list = [] 
 
+    seen_product = set() 
+    new_store_similars = [] 
+
 
     for elem in permute: 
         a = list(zip(elem, ebay_title_parse_list))
@@ -209,13 +212,24 @@ def home():
             calc_similar = s1.similarity(s2) 
             store_similars.append([calc_similar, s1, s2]) 
     
-    store_similars.sort(key=lambda x: x[0])
+    new_list_copy = [set(v) for v in store_similars]
+    for elem in new_list_copy: 
+        s2 = list(elem)
+        b = [str(s2[1]), str(s2[2])]
+        t = tuple(b)
+        if t not in seen_product:
+            new_store_similars.append(s2)
+            seen_product.add(t)
+    
+    
+    
+    new_store_similars.sort(key=lambda x: x[0])
 
-    print(store_similars)
+    print(new_store_similars)
 
-    if len(store_similars) > 0: 
-        for i in range(len(store_similars) - 5, len(store_similars)): 
-            a = [store_similars[i][0], store_similars[i][1], store_similars[i][2]]
+    if len(new_store_similars) > 0: 
+        for i in range(len(new_store_similars) - 3, len(new_store_similars)): 
+            a = [new_store_similars[i][0], new_store_similars[i][1], new_store_similars[i][2]]
             top_similars_titles.append(a) 
         
         for i in range(len(top_similars_titles)): 
@@ -233,10 +247,12 @@ def home():
             result_ebay_list.append(top_similars_titles[i][2])
     
     
-    
+    print("lIST 1: ", result_amazon_list) 
+    print("lIST 2: ", result_ebay_list) 
 
 
-    return render_template('index.html', context_amazon_info={"data":zip(amazon_info['image'], amazon_info['title'], amazon_info['cost'])}, context_ebay_info={"data": zip(ebay_info['title'], ebay_info['cost'])}, total_amazon_cost=total_sum_amazon_cost, total_ebay_cost=total_sum_ebay_cost, context_similar_products={"data": zip(result_amazon_list, result_ebay_list)})
+
+    return render_template('index.html', context_amazon_info={"data":zip(amazon_info['title'], amazon_info['cost'])}, context_ebay_info={"data": zip(ebay_info['title'], ebay_info['cost'])}, total_amazon_cost=total_sum_amazon_cost, total_ebay_cost=total_sum_ebay_cost, context_similar_products={"data": zip(result_amazon_list, result_ebay_list)})
 
     
 

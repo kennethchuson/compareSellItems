@@ -9,9 +9,22 @@
     padding: 10px;
 }
 
-.amazon-grid-item {
+.amazon-grid-item, .ebay-grid-item {
     border: 1px solid rgba(54, 54, 54, 0.8);
-    padding: 20px;
     font-size: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    gap: 1rem;
     text-align: center;
+}
+
+@media (min-width: 600px) {
+    .amazon-grid-item, .ebay-grid-item { 
+        grid-template-columns: repeat(2, 1fr); 
+    }
+  }
+
+.similar_card_product {
+    border: 1px solid rgba(54, 54, 54, 0.8);
 }
