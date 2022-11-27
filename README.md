@@ -13,9 +13,13 @@ Using only one application platform, you can see your search product between Ama
 *  Flask
 
 
-Run Project: 
+Set up and run Project: 
+
+* Install Chrome Driver 
 
 ```
+pip3 install -r requirements.txt
+
 python3 app.py
 ```
 
