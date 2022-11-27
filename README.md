@@ -3,7 +3,7 @@
 
 
 ## About
-Using only one application platform, you can see your search product between Amazon and Ebay easily. The status feature will help to compare your search for a product with each of the list of the product's name and cost.
+Using only one application platform, you can see your search product between Amazon and Ebay easily. The status feature will help to compare your search for a product with each of the list of varieties of item's name and cost. 
 
 
 ## Modules: 
